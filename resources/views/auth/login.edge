@@ -1,0 +1,69 @@
+@layout('layouts/main')
+@set('title', 'Login')
+
+@section('content')
+<div class="container">
+<h4 class="text-center fs-4  fw-bold">Login</h4>
+
+<div class="row justify-content-center align-items-center flex-column">
+<div class="col-12 col-sm-8 col-md-6 col-lg-4 " >
+<form action="{{ route('AuthController.login')}}" method="post" class="">
+
+
+
+<div class="form-floating mt-3">
+    <input required  name="email"   {{flashMessages.has('errors.email') && 'is-invalid'}} type="email" class="form-control" id="floatingInput" placeholder="Email">
+    <label for="floatingInput">Email address</label>
+      @if(flashMessages.has('errors.email'))
+        <p class="fs-6 text-danger mb-0">
+       {{ flashMessages.get('errors.email') }}
+      </p>
+     @endif
+  </div>
+  <div class="form-floating mt-3">
+    <input required name="password"   {{flashMessages.has('errors.password') && 'is-invalid'}} type="password" class="form-control" id="floatingPassword" placeholder="Password">
+    <label for="floatingPassword">Password</label>
+      @if(flashMessages.has('errors.password'))
+        <p class="fs-6 text-danger mb-0">
+       {{ flashMessages.get('errors.password') }}
+      </p>
+     @endif
+  </div>
+  </div>
+<div class="mt-5 text-center">
+<button type="submit" class="btn btn-secondary">Login
+<i class="fa-solid fa-right-to-bracket ms-2"></i>
+      </button>
+<a href="{{route('AuthController.signup')}}"  class="btn btn-primary">Signup
+<i class="fa-solid fa-user-plus ms-2"></i>
+</a>
+</form>
+
+
+<div class="mt-5 text-center">
+<p class="text-muted">Or login with google,github,instagram or facebook</p>
+<button type="submit" class="btn btn-secondary m-1">Google
+<i class="fa-brands fa-google"></i>
+      </button>
+<button type="submit" class="btn btn-primary m-1">Github
+<i class="fa-brands fa-github"></i>
+</button>
+<button type="submit" class="btn btn-primary m-1">Instagram
+
+
+<i class="fa-brands fa-instagram"></i>
+</button>
+<button type="submit" class="btn btn-primary m-1">Facebook
+
+
+<i class="fa-brands fa-facebook"></i>
+</button>
+</div>
+
+</div>
+</div>
+</div>
+
+
+
+@endsection

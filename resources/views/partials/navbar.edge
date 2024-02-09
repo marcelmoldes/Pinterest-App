@@ -1,0 +1,47 @@
+<nav class="navbar navbar-expand-lg shadow-sm p-3 mb-4 navbar-light">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold text-primary" href="#">Pintrest</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+@if(auth.isLoggedIn)
+
+
+  <li class="nav-item">
+                 <a class="nav-link active" aria-current="page" href="{{route('AuthController.login')}}">Create</a>
+               </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Marcel
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li><a class="dropdown-item" href="#">Post</a></li>
+            <li><a class="dropdown-item" href="#">Logout</a></li>
+          </ul>
+        </li>
+
+      </ul>
+      @else
+
+ <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{route('AuthController.login')}}">Login</a>
+              </li>
+
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{{route('AuthController.signup')}}">Sign Up</a>
+        </li>
+
+@endif
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+              <button class="btn btn-outline-info ms-1" type="submit">Reset</button>
+    </div>
+  </div>
+</nav>
