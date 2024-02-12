@@ -19,7 +19,7 @@ export default class Profile extends BaseModel {
   public avatar_url: string | null
 
   @column()
-  public social_auth: 'google' | 'github' | 'facebook' | 'local'
+  public social_auth: string | null
 
   @column()
   public user_id: number

@@ -10,3 +10,12 @@ interface updateOrCreateProfileType {
   lastName: string
   userId: number
 }
+
+interface CreateOrFindOAuthUserType {
+  firstName: string
+  lastName: string
+  email:string
+  avatarUrl?: string
+  socialAuth?: string
+
+}

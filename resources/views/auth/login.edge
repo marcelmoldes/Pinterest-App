@@ -30,6 +30,7 @@
      @endif
   </div>
   </div>
+
 <div class="mt-5 text-center">
 <button type="submit" class="btn btn-secondary">Login
 <i class="fa-solid fa-right-to-bracket ms-2"></i>
@@ -38,26 +39,19 @@
 <i class="fa-solid fa-user-plus ms-2"></i>
 </a>
 </form>
-
-
 <div class="mt-5 text-center">
 <p class="text-muted">Or login with google,github,instagram or facebook</p>
-<button type="submit" class="btn btn-secondary m-1">Google
+<a href="{{route('google.redirect')}}" class="btn btn-secondary m-1">Google
 <i class="fa-brands fa-google"></i>
-      </button>
-<button type="submit" class="btn btn-primary m-1">Github
+      </a>
+<a href="{{route('github.redirect')}}" class="btn btn-primary m-1">Github
 <i class="fa-brands fa-github"></i>
-</button>
-<button type="submit" class="btn btn-primary m-1">Instagram
-
-
-<i class="fa-brands fa-instagram"></i>
-</button>
-<button type="submit" class="btn btn-primary m-1">Facebook
-
+</a>
+</a>
+<a type="submit" class="btn btn-primary m-1">Facebook
 
 <i class="fa-brands fa-facebook"></i>
-</button>
+</a>
 </div>
 
 </div>
