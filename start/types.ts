@@ -19,3 +19,11 @@ interface CreateOrFindOAuthUserType {
   socialAuth?: string
 
 }
+interface UpdateProfileType {
+  id: number
+  lastName?: string
+  firstName?: string
+  password?: string
+  storagePrefix?: string
+
+}
