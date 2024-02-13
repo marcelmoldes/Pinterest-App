@@ -18,3 +18,4 @@ Route.group(() => {
 }).middleware('isGuest')
 
 Route.resource('/profile', 'ProfilesController').only(['show','edit','update'])
+Route.resource('/posts', 'PostsController')

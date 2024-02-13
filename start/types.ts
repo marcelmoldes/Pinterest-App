@@ -14,10 +14,9 @@ interface updateOrCreateProfileType {
 interface CreateOrFindOAuthUserType {
   firstName: string
   lastName: string
-  email:string
+  email: string
   avatarUrl?: string
   socialAuth?: string
-
 }
 interface UpdateProfileType {
   id: number
@@ -25,5 +24,11 @@ interface UpdateProfileType {
   firstName?: string
   password?: string
   storagePrefix?: string
-
+}
+interface StorePostType {
+  description: string
+  title: string
+  userId: number
+  storagePrefix: string
+  tags: string[]
 }

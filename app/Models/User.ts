@@ -1,10 +1,10 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { BaseModel, beforeSave, hasOne, HasOne, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeSave, HasMany,hasOne, hasMany,HasOne, column } from '@ioc:Adonis/Lucid/Orm'
 import Profile from 'App/Models/Profile'
 import Database from '@ioc:Adonis/Lucid/Database'
 import * as console from "console";
-
+import Post from "App/Models/Post";
 
 
 export default class User extends BaseModel {
@@ -30,6 +30,17 @@ export default class User extends BaseModel {
     foreignKey: 'user_id',
   })
   public profile: HasOne<typeof Profile>
+
+  @hasMany(() => Post,{
+   foreignKey: 'user_id' ,
+
+  })
+  public posts: HasMany<typeof Post>
+
+
+
+
+
   @beforeSave()
   public static async hashPassword(user: User) {
     if (user.$dirty.password && user.password) {
