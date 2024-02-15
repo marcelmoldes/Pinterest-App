@@ -57,36 +57,34 @@ export default class Profile extends BaseModel {
     return 'Profile created'
   }
   public static getProfileById = async (id: number) => {
-  const profile = await this.query().where('id',id).preload('user').firstOrFail()
+    const profile = await this.query().where('id', id).preload('user').firstOrFail()
     return Promise.resolve(profile)
   }
-  public static updateProfile = async(data:UpdateProfileType,trx:TransactionClientContract) => {
-    const {id,firstName,lastName,password,storagePrefix} = data
-    const profile = await this.query({client:trx}).where('id',id).preload('user').firstOrFail()
+  public static updateProfile = async (data: UpdateProfileType, trx: TransactionClientContract) => {
+    const { id, firstName, lastName, password, storagePrefix } = data
+    const profile = await this.query({ client: trx }).where('id', id).preload('user').firstOrFail()
 
-  if(password) {
-    profile.user.password = password
-    profile.social_auth = 'local'
-  }
+    if (password) {
+      profile.user.password = password
+      profile.social_auth = 'local'
+    }
 
-  if(lastName) {
-    profile.last_name = lastName
-  }
-    if(firstName && lastName) {
+    if (lastName) {
+      profile.last_name = lastName
+    }
+    if (firstName && lastName) {
       profile.full_name = `${data.firstName} ${data.lastName}`
     }
 
-      if(firstName) {
-        profile.first_name = firstName
-      }
+    if (firstName) {
+      profile.first_name = firstName
+    }
 
-        if(storagePrefix) {
-          profile.storage_prefix = storagePrefix
-          profile.avatar_url = null
-        }
-        await profile.save()
-        return Promise.resolve('Profile Updated')
-
-      }
-
+    if (storagePrefix) {
+      profile.storage_prefix = storagePrefix
+      profile.avatar_url = null
+    }
+    await profile.save()
+    return Promise.resolve('Profile Updated')
+  }
 }

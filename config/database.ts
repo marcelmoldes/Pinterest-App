@@ -9,7 +9,6 @@ import Env from '@ioc:Adonis/Core/Env'
 import type { DatabaseConfig } from '@ioc:Adonis/Lucid/Database'
 
 const databaseConfig: DatabaseConfig = {
-
   connection: Env.get('DB_CONNECTION'),
 
   connections: {
@@ -39,8 +38,7 @@ const databaseConfig: DatabaseConfig = {
       healthCheck: false,
       debug: false,
     },
-
-  }
+  },
 }
 
 export default databaseConfig

@@ -1,11 +1,18 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { BaseModel, beforeSave, HasMany,hasOne, hasMany,HasOne, column } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  beforeSave,
+  HasMany,
+  hasOne,
+  hasMany,
+  HasOne,
+  column,
+} from '@ioc:Adonis/Lucid/Orm'
 import Profile from 'App/Models/Profile'
 import Database from '@ioc:Adonis/Lucid/Database'
-import * as console from "console";
-import Post from "App/Models/Post";
-
+import * as console from 'console'
+import Post from 'App/Models/Post'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -31,15 +38,10 @@ export default class User extends BaseModel {
   })
   public profile: HasOne<typeof Profile>
 
-  @hasMany(() => Post,{
-   foreignKey: 'user_id' ,
-
+  @hasMany(() => Post, {
+    foreignKey: 'user_id',
   })
   public posts: HasMany<typeof Post>
-
-
-
-
 
   @beforeSave()
   public static async hashPassword(user: User) {
@@ -81,42 +83,42 @@ export default class User extends BaseModel {
       return Promise.reject(error)
     }
   }
-  public static CreateOrfFindOAuthUser = async (data: CreateOrFindOAuthUserType) => {
+  public static CreateOrFindOAuthUser = async (data: CreateOrFindOAuthUserType) => {
     let user = await this.query().where('email', data.email).preload('profile').first()
 
     if (user) {
       if (user.profile.social_auth !== data.socialAuth) {
-        return Promise.reject(new Error('User already exists with this email'))
+        return Promise.resolve(user)
       }
     } else {
       const trx = await Database.transaction()
       try {
-        user = await this.create({
+        user = await this.create(
+          {
             email: data.email,
-
-          }, {
-            client: trx
+          },
+          {
+            client: trx,
           }
-        );
-        await Profile.create({
-
+        )
+        await Profile.create(
+          {
             first_name: data.firstName,
             last_name: data.lastName,
-             user_id: user.id,
+            user_id: user.id,
             full_name: `${data.firstName} ${data.lastName}`,
             avatar_url: data.avatarUrl,
             social_auth: data.socialAuth,
-          }, {client: trx}
-        );
+          },
+          { client: trx }
+        )
         await trx.commit()
-
       } catch (error) {
-        await trx.rollback();
+        await trx.rollback()
         console.error(error)
         return Promise.reject(error)
       }
     }
     return Promise.resolve(user)
-  };
-
+  }
 }

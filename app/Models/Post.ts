@@ -10,6 +10,7 @@ import {
 import Tag from 'App/Models/Tag'
 import User from 'App/Models/User'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
 export default class Post extends BaseModel {
   @column({ isPrimary: true })
   public id: number
@@ -47,7 +48,7 @@ export default class Post extends BaseModel {
   })
   public tags: ManyToMany<typeof Tag>
 
-  public static storePost = async (data: StorePostType, trx) => {
+  public static storePost = async (data: StorePostType, trx: TransactionClientContract) => {
     const post = await this.create(
       {
         title: data.title,
@@ -60,6 +61,7 @@ export default class Post extends BaseModel {
       }
     )
     const createdTagIds = await Tag.storeTag(data.tags, trx)
+
     post.related('tags').attach(createdTagIds)
     return Promise.resolve('Post created')
   }

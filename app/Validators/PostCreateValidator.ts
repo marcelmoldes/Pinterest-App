@@ -10,7 +10,6 @@ export default class PostCreateValidator {
       size: '2mb',
       extnames: ['jpg', 'png'],
     }),
-    tags: schema.array([rules.minLength(1)]).members(schema.string([rules.alpha()])),
   })
 
   public messages: CustomMessages = {
@@ -20,9 +19,5 @@ export default class PostCreateValidator {
     'description.required': 'Description is required',
     'postImage.size': 'Image side not be greater than 2md',
     'postImage.extnames': 'Image only can be jpg or png',
-
-    'tags.*.string': 'Tags is required',
-    'tags.minLength': 'Only valid a string',
-    'tags.*.alpha': 'Only alpha',
   }
 }

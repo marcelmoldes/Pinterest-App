@@ -15,7 +15,7 @@
    <div class="row justify-content-around">
      <div class="col-12 col-md-6 col-lg-4 ">
 <h4 class="mb-4 fs-4 fw-bold text-center">Image Preview</h4>
-<img src="" class="img-thumbnail" id="previewImage" style="display: none">
+<img src="" class="img-thumbnail" id="previewImage" style="display: none" alt="">
 <p class="text-center"  id="imgMessage">Image not selected</p>
 </div>
 
@@ -42,15 +42,16 @@
       </p>
      @endif
   </div>
- <div class=" mb-4">
+ <div class="mb-4">
    <label for="formFile" class="mt-2 text-capitalize form-label">Post Image</label>
-   <input class="form-control" {{flashMessages.has('errors.postImage') && 'is-invalid'}}  type="file" id="postImage">
+   <input required class="form-control" {{flashMessages.has('errors.postImage') && 'is-invalid'}}  type="file" name="postImage">
  </div>
      @if(flashMessages.has('errors.postImage'))
          <p class="fs-6 text-danger mb-0">
         {{ flashMessages.get('errors.postImage') }}
        </p>
       @endif
+
       @!component('components/tag_input')
 
       <button class="btn btn-primary mt-2" type="submit">

@@ -41,7 +41,7 @@
 <h4 class="mb-4 fs-4 fw-bold text-center">Edit Profile</h4>
 <form action="{{ route('profile.update',{id:profile.id},{qs: { _method: 'PUT'} })}}" method="post" enctype="multipart/form-data" class="">
   <div class="form-floating mt-3">
-    <input value="{{flashMessages.get('firstName',profile.first_name)}} "    name="firstName"   {{flashMessages.has('errors.firstName') && 'is-invalid'}} type="text" class="form-control" id="floatingInput" placeholder="First Name">
+    <input value="{{flashMessages.get('firstName',profile.first_name)}}"    name="firstName"   {{flashMessages.has('errors.firstName') && 'is-invalid'}} type="text" class="form-control" id="floatingInput" placeholder="First Name">
     <label for="floatingInput">First Name</label>
       @if(flashMessages.has('errors.firstName'))
         <p class="fs-6 text-danger mb-0">
@@ -59,11 +59,11 @@
  @endif
  <div class="mb-4">
    <label for="formFile" class="mt-2 text-capitalize form-label">Profile Image</label>
-   <input class="form-control" type="file" id="postImage">
+   <input class="form-control" type="file" name="postImage">
  </div>
 
   <div class="form-floating mt-3">
-    <input value="{{flashMessages.get('password',profile.password)}} "  required name="password"   {{flashMessages.has('errors.password') && 'is-invalid'}} type="password" class="form-control" id="floatingPassword" placeholder="Password">
+    <input value="{{flashMessages.get('password',profile.password ? profile.password: '')}}" name="password"   {{flashMessages.has('errors.password') && 'is-invalid'}} type="password" class="form-control" id="floatingPassword" placeholder="Password">
     <label for="floatingPassword">Password</label>
       @if(flashMessages.has('errors.password'))
         <p class="fs-6 text-danger mb-0">

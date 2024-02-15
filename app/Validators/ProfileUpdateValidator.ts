@@ -5,13 +5,11 @@ export default class CreateTaskValidator {
   public schema = schema.create({
     firstName: schema.string.optional([rules.alpha(), rules.trim()]),
     lastName: schema.string.optional([rules.alpha(), rules.trim()]),
-    password: schema.string.optional([ rules.minLength(8), rules.trim()]),
-    postImage: schema.file.optional( {
+    password: schema.string.optional([rules.minLength(8), rules.trim()]),
+    postImage: schema.file.optional({
       size: '2mb',
       extnames: ['jpg', 'png'],
-    })
-
-
+    }),
   })
   public messages: CustomMessages = {
     'fistName.alpha': 'First Name only alphabets',

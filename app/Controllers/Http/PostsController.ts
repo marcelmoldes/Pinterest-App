@@ -5,7 +5,6 @@ import Post from 'App/Models/Post'
 import path from 'path'
 import Database from '@ioc:Adonis/Lucid/Database'
 import Env from '@ioc:Adonis/Core/Env'
-import { response } from 'express'
 export default class PostsController {
   public index = async ({ view }: HttpContextContract) => {
     const html = await view.render('posts/index')
@@ -16,7 +15,7 @@ export default class PostsController {
     const html = await view.render('posts/create')
     return html
   }
-  public store = async ({ request, session, auth }: HttpContextContract) => {
+  public store = async ({ request, session, auth, response }: HttpContextContract) => {
     const payload = await request.validate(PostCreateValidator)
     const userDir = auth.user!.id
     const newImageName = `${cuid()}.${payload.postImage.extname}`
@@ -26,10 +25,10 @@ export default class PostsController {
       await Post.create(
         {
           description: payload.description,
-          title: payload.title,
-          storagePrefix: storagePrefix,
-          userId: auth.user!.id,
+          storage_prefix: storagePrefix,
           tags: payload.tags,
+          title: payload.title,
+          user_id: auth.user!.id,
         },
         { trx }
       )
