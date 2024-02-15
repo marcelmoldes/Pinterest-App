@@ -9,8 +9,8 @@ import {
 } from '@ioc:Adonis/Lucid/Orm'
 import Tag from 'App/Models/Tag'
 import User from 'App/Models/User'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
+import S3ReadService from 'App/Services/S3ReadService'
 export default class Post extends BaseModel {
   @column({ isPrimary: true })
   public id: number
@@ -61,8 +61,38 @@ export default class Post extends BaseModel {
       }
     )
     const createdTagIds = await Tag.storeTag(data.tags, trx)
-
-    post.related('tags').attach(createdTagIds)
+    await post.related('tags').attach(createdTagIds)
     return Promise.resolve('Post created')
+  }
+  public static getPostById = async (postId: number) => {
+    let post = await this.query()
+      .where('id', postId)
+      .preload('user', (userQuery) => {
+        userQuery.preload('profile')
+      })
+      .preload('tags')
+      .firstOrFail()
+
+    post = await S3ReadService.readSingleImage(post)
+    return Promise.resolve(post)
+  }
+  public static updatePost = async (data: UpdatePostType, trx: TransactionClientContract) => {
+    let post = await this.query({ client: trx }).where('id', data.id).firstOrFail()
+    if (!post) {
+      return Promise.reject(new Error('Post not found'))
+    }
+    if (data.title) {
+      post.title = data.title
+    }
+    if (data.description) {
+      post.description = data.description
+    }
+    if (data.storagePrefix) {
+      post.storage_prefix = data.storagePrefix
+    }
+    const tagIds = await Tag.storeTag(data.tags, trx)
+    await post.related('tags').sync(tagIds)
+    await post.save()
+    return Promise.resolve('Post updated')
   }
 }

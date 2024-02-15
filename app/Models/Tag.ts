@@ -18,22 +18,8 @@ export default class Tag extends BaseModel {
   public static storeTag = async (tags: string[], trx: TransactionClientContract) => {
     const tagIds: number[] = []
     for (const tag of tags) {
-      const exists = await this.findBy('title', tag, { client: trx })
-      if (exists) {
-        if (!tagIds.includes(exists.id)) {
-          tagIds.push(exists.id)
-        }
-      } else {
-        const createdTag = await this.create(
-          {
-            title: tag,
-          },
-          { client: trx }
-        )
-        if (!tagIds.includes(createdTag.id)) {
-          tagIds.push(createdTag.id)
-        }
-      }
+      const createdTag = await this.firstOrCreate({ title: tag }, { title: tag }, { client: trx })
+      tagIds.push(createdTag.id)
     }
 
     return Promise.resolve(tagIds)

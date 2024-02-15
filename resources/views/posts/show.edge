@@ -1,0 +1,95 @@
+@layout('layouts/main')
+@set('title', 'Profile')
+@section('content')
+
+
+<div class="container">
+<nav  style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{route('posts.index')}}">Posts</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Show</li>
+  </ol>
+</nav>
+
+
+<div class="row my-4 p-4 border rounded">
+<div class="col-6 col-sm-6 col-md-6">
+<img src="data:image/png;base64, {{post.$extras.base64String}}" alt="postImage" class="card-img-top card-img-bottom">
+
+</div>
+<div class="col-6 col-sm-6 col-md-6">
+<h4 class=""> Title
+<small class="text-capitalize text-muted">{{post.title}}</small>
+</h4>
+
+<h4 class="mt-4"> Description
+<small class="text-capitalize text-muted">{{post.description}}</small>
+</h4>
+
+<h4 class="mt-4"> Tags</h4>
+<div class="border rounded">
+
+@each(tag in post.tags)
+<span class="badge rounded-pill bg-secondary text-capitalize m-1 p-2">{{tag.title}}</span>
+
+
+
+@endeach
+</div>
+<div  class="mt-4">
+
+<a href="{{ route('posts.edit',{ id:post.id}) }}" type="button" class="btn text-white btn-warning">Edit
+<i class="fa-solid fa-pen-to-square"></i>
+</a>
+<button type="button" class="btn btn-danger">Delete
+<i class="fa-solid fa-trash"></i>
+</button>
+<button type="button" class="btn btn-success">Download
+<i class="fa-solid fa-download"></i>
+</button>
+</div>
+<h4 class="mt-4"> Created By
+<a class="text-capitalize text-danger" href="{{route('profile.show',{id: post.user.profile.id})}}">{{post.user.profile.full_name}}</a>
+</h4>
+
+
+</div>
+<h4 class="mt-4 text-primary">
+<i class="fa-solid fa-share-nodes"></i>
+More Related
+</h4>
+<hr>
+
+<div class="row">
+
+@each(post in posts)
+<div class="col-6 col-sm-6 col-md-4 col-lg">
+<a href="{{route('posts.show',{ id: post.id})}}">
+<div class="d-flex flex-column justify-content-center align-items-center">
+<div class="row">
+<img src="data:image/png;base64, {{post.$extras.base64String}}" alt="postImage" class="card-img-top card-img-bottom">
+</div>
+<div class="row">
+<p class="f-6 text-capitalize">{{post.title}}</p>
+</div>
+</div>
+</a></div>
+@else
+<div class="col-12">
+<p class="fs-4 text-center">No related posts found</p>
+
+</div>
+@endeach
+
+
+
+<div class="row"></div>
+</div>
+
+
+</div>
+
+
+
+
+@endsection

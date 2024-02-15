@@ -1,30 +1,30 @@
 @layout('layouts/main')
-
-
-@set('title', 'Post create')
+@set('title', 'Edit Post')
 
 @section('content')
  <div class="container">
    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
      <ol class="breadcrumb">
        <li class="breadcrumb-item"><a href="{{route('posts.index')}}">Post</a></li>
-       <li class="breadcrumb-item active" aria-current="page">Create</li>
+       <li class="breadcrumb-item active" aria-current="page">Edit</li>
      </ol>
    </nav>
 
    <div class="row justify-content-around">
      <div class="col-12 col-md-6 col-lg-4 ">
-<h4 class="mb-4 fs-4 fw-bold text-center">Image Preview</h4>
-<img src="" class="img-thumbnail" id="previewImage" style="display: none" alt="">
-<p class="text-center"  id="imgMessage">Image not selected</p>
+<h4 class="mb-4 fs-4 fw-bold text-center">Profile Image Preview</h4>
+
+
+<img src="data:image/png;base64, {{post.$extras.base64String}}" alt="postImage" class="card-img-top card-img-bottom">
+
 </div>
 
   <div class="col-12 col-md-6  col-lg-4 ">
 
-<h4 class="mb-4 fs-4 fw-bold text-center">Create Post</h4>
-<form action="{{route('posts.store')}}" enctype="multipart/form-data" method="post">
+<h4 class="mb-4 fs-4 fw-bold text-center">Edit Post</h4>
+<form action="{{route('posts.update',{id:post.id}, {qs: { _method: 'PUT'} }) }}" enctype="multipart/form-data" method="post">
 <div class="form-floating mt-3">
-    <input required  name="title"   {{flashMessages.has('errors.title') && 'is-invalid'}}type="text" class="form-control" id="floatingInput" placeholder="Title">
+    <input  value="{{flashMessages.get('title',post.title)}}"   name="title"   {{flashMessages.has('errors.title') && 'is-invalid'}}type="text" class="form-control" id="titleInput" placeholder="Title">
     <label for="floatingInput">Post Title</label>
       @if(flashMessages.has('errors.title'))
         <p class="fs-6 text-danger mb-0">
@@ -32,8 +32,9 @@
       </p>
      @endif
   </div>
+
 <div class="form-floating mt-3">
-    <textarea style="height: 100px" required  name="description"   {{flashMessages.has('errors.description') && 'is-invalid'}} type="text" class="form-control" id="floatingInput" placeholder="Description">
+    <textarea value="{{flashMessages.get('description',post.description)}}"  style="height: 100px" required  name="description"   {{flashMessages.has('errors.description') && 'is-invalid'}} type="text" class="form-control" id="descriptionInput" placeholder="Description">
     </textarea>
     <label for="floatingInput">Description</label>
       @if(flashMessages.has('errors.description'))
@@ -42,21 +43,24 @@
       </p>
      @endif
   </div>
+  <script>
+const desc = document.getElementById('descriptionInput')
+const value = '{{post.description}}'
+if(value) {
+  desc.innerHTML = value
+}
+
+</script>
  <div class="mb-4">
    <label for="formFile" class="mt-2 text-capitalize form-label">Post Image</label>
-   <input required class="form-control" {{flashMessages.has('errors.postImage') && 'is-invalid'}}  type="file" name="postImage">
+   <input  class="form-control" {{flashMessages.has('errors.postImage') && 'is-invalid'}}  type="file" name="postImage">
  </div>
-     @if(flashMessages.has('errors.postImage'))
-         <p class="fs-6 text-danger mb-0">
-        {{ flashMessages.get('errors.postImage') }}
-       </p>
-      @endif
 
-      @!component('components/tag_input')
 
-      <button class="btn btn-primary mt-2" type="submit">
-                                                Create
-                                                <i class="fa-solid fa-plus"></i>
+      @!component('components/tag_input',{tags:post.tags})
+
+      <button class="btn btn-primary bg-danger mt-2" type="submit">
+                                                Update<i class="fa-solid fa-pen-to-square"></i>
                                                 </button>
 </form>
 

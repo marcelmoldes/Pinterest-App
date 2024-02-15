@@ -24,6 +24,8 @@ $(document).ready(() => {
    const $tabContainer =  $('#tabContainer')
    const $addTagBtn =  $('#addTagBtn')
    const $tagInput =  $('#tagInput')
+   const postTags = JSON.parse("{{{JSON.stringify(tags)}}}")
+
 
    const appendTagInput = (id,value) => {
        const input =  `<input type=hidden id=tag_${id} name=tags[] value=${value}>`
@@ -69,5 +71,29 @@ $(document).ready(() => {
        $tagInput.val('')
 
    })
+
+   if(postTags && postTags.length) {
+   for(const tag of postTags) {
+  tags.push(tag.title)
+          appendTagInput(index,tag.title)
+          const savedId = index
+
+          const element = `<span class="badge rounded-pill bg-secondary text-capitalize m-1 p-2" id=${savedId} style="cursor:pointer;">${value}</span>`
+          $tabContainer.append(element)
+          const $tagInstance = $(`#${savedId}`)
+
+          $(`#${savedId}`).on('click',() => {
+              const index = tags.indexOf($tagInstance.text())
+              if(index > -1) {
+                  tags.splice(index,1)
+                  removeTagInput(savedId)
+                  $tagInstance.addClass('fade').remove()
+
+              }
+          })
+
+          index += 1
+   }
+   }
 });
 </script>

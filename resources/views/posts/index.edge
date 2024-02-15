@@ -2,5 +2,42 @@
 @set('title', 'Posts')
 
 @section('content')
-<h4>Posts Index Page</h4>
+<div class="container">
+
+<nav  style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Post</li>
+  </ol>
+</nav>
+<div class="row">
+
+@each(post in posts)
+<div class="col-6 col-sm-6 col-md-4 col-lg">
+<a href="{{route('posts.show',{ id: post.id})}}">
+<div class="d-flex flex-column justify-content-center align-items-center">
+<div class="row">
+<img src="data:image/png;base64, {{post.$extras.base64String}}" alt="postImage" class="card-img-top card-img-bottom">
+</div>
+<div class="row">
+<p class="f-6 text-capitalize">{{post.title}}</p>
+</div>
+</div>
+</a></div>
+@else
+<div class="col-12">
+<p class="fs-4 text-center">No posts created,please create some posts by clicking here</p>
+<a href="{{ route('posts.create') }}" class="btn btn-primary">
+Create
+</a>
+</div>
+@endeach
+
+
+
+<div class="row"></div>
+</div>
+
+
+</div>
 @endsection

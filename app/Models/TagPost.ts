@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Post from 'App/Models/Post'
+import S3ReadService from 'App/Services/S3ReadService'
 
 export default class TagPost extends BaseModel {
   @column({ isPrimary: true })
@@ -22,4 +23,16 @@ export default class TagPost extends BaseModel {
     foreignKey: 'post_id',
   })
   public post: BelongsTo<typeof Post>
+
+  public static findRelatedPost = async (tagIds: number[], postId: number) => {
+    const tags = await this.query()
+      .whereIn('tag_id', tagIds)
+      .andWhereNot('post_id', postId)
+      .preload('post')
+
+    let posts = tags.map((item) => item.post)
+    posts = [...new Set(posts)]
+    const readedPosts = await S3ReadService.readMultipleImages(posts)
+    return Promise.resolve(readedPosts)
+  }
 }

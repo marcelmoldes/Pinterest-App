@@ -32,3 +32,10 @@ interface StorePostType {
   storagePrefix: string
   tags: string[]
 }
+interface UpdatePostType {
+  id: number
+  title?: string
+  description?: string
+  storagePrefix?: string
+  tags: string[]
+}
