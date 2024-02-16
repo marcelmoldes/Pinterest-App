@@ -1,8 +1,6 @@
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', async ({ view }) => {
-  return view.render('welcome')
-}).as('home')
+Route.get('/', 'HomeController.index').as('home')
 
 Route.group(() => {
   Route.route('/signup', ['GET', 'POST'], 'AuthController.signup').as('signup')
@@ -18,3 +16,4 @@ Route.get('/logout', 'AuthController.logout').as('logout')
 
 Route.resource('/profile', 'ProfilesController').only(['show', 'edit', 'update'])
 Route.resource('/posts', 'PostsController')
+Route.get('/posts/download/:id', 'PostsController.download').as('posts.download')

@@ -78,11 +78,14 @@ $(document).ready(() => {
           appendTagInput(index,tag.title)
           const savedId = index
 
-          const element = `<span class="badge rounded-pill bg-secondary text-capitalize m-1 p-2" id=${savedId} style="cursor:pointer;">${value}</span>`
+          const element =
+          `
+<span class="badge rounded-pill bg-secondary text-capitalize m-1 p-2" id=${savedId} style="cursor:pointer;">${tag.title}</span>
+`
           $tabContainer.append(element)
           const $tagInstance = $(`#${savedId}`)
 
-          $(`#${savedId}`).on('click',() => {
+          $tagInstance.on('click',() => {
               const index = tags.indexOf($tagInstance.text())
               if(index > -1) {
                   tags.splice(index,1)

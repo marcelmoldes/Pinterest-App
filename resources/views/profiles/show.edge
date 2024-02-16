@@ -13,10 +13,10 @@
 
 
 <div class="text-center">
-@if(profile.social_auth)
+@if(profile.storage_prefix)
 
 <img src="data:image/png;base64,{{imgBase64}}" alt="profile" class="img-thumbnail" style="height: 300px">
-@elseif(profile.sociaAuth === 'google' ||  profile.sociaAuth === 'github' )
+@elseif(profile.socia_auth === 'google' ||  profile.social_auth === 'github' )
   <img src="{{profile.avatar_url}}" alt="profile" class="img-thumbnail">
      @else
 

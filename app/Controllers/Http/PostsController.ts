@@ -8,7 +8,7 @@ import Env from '@ioc:Adonis/Core/Env'
 import User from 'App/Models/User'
 import Post from 'App/Models/Post'
 import TagPost from 'App/Models/TagPost'
-
+import { extname } from 'path'
 import Drive from '@ioc:Adonis/Core/Drive'
 export default class PostsController {
   public index = async ({ view, auth, session, response }: HttpContextContract) => {
@@ -145,6 +145,51 @@ export default class PostsController {
 
       console.error(error)
       session.flash({ error: error.message })
+      return response.redirect().toRoute('posts.index')
+    }
+  }
+  public destroy = async ({ params, response, session }: HttpContextContract) => {
+    const { id } = params
+    const trx = await Database.transaction()
+    let post: Post
+    try {
+      post = await Post.firstOrFail(id, { client: trx })
+    } catch (error) {
+      console.error(error)
+      session.flash({ error: 'Post not found' })
+      return response.redirect().toRoute('posts.index')
+    }
+
+    try {
+      await post.delete()
+
+      await Drive.delete(post.storage_prefix)
+      await trx.commit()
+      return response.redirect().toRoute('posts.index')
+    } catch (error) {
+      await trx.rollback()
+      console.error(error)
+      session.flash({ error: error.message })
+      return response.redirect().toRoute('posts.index')
+    }
+  }
+  public download = async ({ params, response, session }: HttpContextContract) => {
+    const { id } = params
+    let post: Post
+    try {
+      post = await Post.firstOrFail(id)
+      const { size } = await Drive.getStats(post.storage_prefix)
+      response.type(path.extname(post.storage_prefix))
+      response.header('content-length', size)
+
+      response.header(
+        'content-disposition',
+        `attachment; filename=${path.basename(post.storage_prefix)}`
+      )
+      return response.stream(await Drive.getStream(post.storage_prefix))
+    } catch (error) {
+      console.error(error)
+      session.flash({ error: 'Post not found' })
       return response.redirect().toRoute('posts.index')
     }
   }
