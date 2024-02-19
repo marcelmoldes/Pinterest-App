@@ -10,34 +10,8 @@
     <li class="breadcrumb-item active" aria-current="page">Post</li>
   </ol>
 </nav>
-<div class="row ">
 
-@each(post in posts)
-<div class="col-6 col-sm-6 col-md-4 col-lg">
-<a href="{{route('posts.show',{ id: post.id})}}">
-<div class="d-flex flex-column justify-content-center align-items-center">
-<div class="row">
-<img src="data:image/png;base64, {{post.$extras.base64String}}" alt="postImage" class="card-img-top card-img-bottom">
-</div>
-<div class="row">
-<p class="f-6 text-capitalize">{{post.title}}</p>
-</div>
-</div>
-</a></div>
-@else
-<div class="col-12 text-center">
-<p class="fs-4">No posts created,please create some posts by clicking here</p>
-<a href="{{ route('posts.create') }}" class="btn btn-primary">
-Create
-<i class="fa-solid ms-2 fa-plus"></i>
-</a>
-</div>
-@endeach
-
-
-
-<div class="row"></div>
-</div>
+@!component('components/posts_list.edge', {posts})
 
 
 </div>

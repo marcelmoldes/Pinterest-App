@@ -13,11 +13,11 @@
 
 
 <div class="text-center">
-@if(profile.storage_prefix)
+@if(fetchedProfile.storage_prefix)
 
-<img src="data:image/png;base64,{{imgBase64}}" alt="profile" class="img-thumbnail" style="height: 300px">
-@elseif(profile.socia_auth === 'google' ||  profile.social_auth === 'github' )
-  <img src="{{profile.avatar_url}}" alt="profile" class="img-thumbnail">
+<img src="{{ profileUrl}}" alt="profile" class="img-thumbnail" style="height: 300px">
+@elseif(fetchedProfile.socia_auth === 'google' ||  fetchedProfile.social_auth === 'github' )
+  <img src="{{fetchedProfile.avatar_url}}" alt="profile" class="img-thumbnail">
      @else
 
          <p class="fs-5 text-capitalize text-danger text-center">
@@ -25,29 +25,42 @@
       </p>
 @endif
 
-<h4 class="text-capitalize mt-4  fw-bold fs-4  fw-bold">{{profile.full_name}}</h4>
-<h5 class=" mt-2 fw-normal fs-5 ">{{profile.user.email}}</h5>
+<h4 class="text-capitalize mt-4  fw-bold fs-4  fw-bold">{{fetchedProfile.full_name}}</h4>
+<h5 class=" mt-2 fw-normal fs-5 ">{{fetchedProfile.user.email}}</h5>
 <button type="button" class="btn  btn-primary" id="shareBtn" data-bs-toggle='modal' data-bs-target="#staticBackdrop">
 <i class="fa-solid fa-share"></i>
 Share</button>
-<a href="{{route('profile.edit',{id: profile.id})}}"  class="btn btn-secondary">
-<i class="fa-solid fa-user-pen"></i>
-Edit Profile</a>
+
+  @can('ProfilePolicy.update', fetchedProfile)
+ <a href="{{route('profile.edit',{id: fetchedProfile.id})}}"  class="btn btn-secondary">
+ <i class="fa-solid fa-user-pen"></i>
+ Edit Profile</a>
+      @end
+
 
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="staticBackdropLabel">Link Copied</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">Close</button>
       </div>
       <div class="modal-body">
       Link Has been copied...
       </div>
-      </div>
+<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">Close</button>
+ </div>
   </div>
 </div>
   </div>
+  <h3 class="mt-4 text-primary">
+        <i class="fa-solid  fa-seedling"></i>
+        Posts By <span><strong class="text-capitalize">{{fetchedProfile.full_name}}</strong></span>
+      </h3>
+<hr>
+
+@!component('components/posts_list.edge', {posts})
+
 </div>
 <script>
 $(document).ready(() => {

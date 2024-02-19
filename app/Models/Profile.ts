@@ -41,9 +41,7 @@ export default class Profile extends BaseModel {
     data: updateOrCreateProfileType,
     trx: TransactionClientContract
   ) => {
-    let queryString = {}
-    await this.updateOrCreate(
-      queryString,
+    await this.create(
       {
         first_name: data.firstName,
         last_name: data.lastName,
@@ -57,7 +55,13 @@ export default class Profile extends BaseModel {
     return 'Profile created'
   }
   public static getProfileById = async (id: number) => {
-    const profile = await this.query().where('id', id).preload('user').firstOrFail()
+    const profile = await this.query()
+      .where('id', id)
+      .preload('user', (userQuery) => {
+        userQuery.preload('posts')
+      })
+      .firstOrFail()
+
     return Promise.resolve(profile)
   }
   public static updateProfile = async (data: UpdateProfileType, trx: TransactionClientContract) => {

@@ -6,18 +6,22 @@ import path from 'path'
 import Database from '@ioc:Adonis/Lucid/Database'
 import Env from '@ioc:Adonis/Core/Env'
 import Drive from '@ioc:Adonis/Core/Drive'
+import ImageReadService from 'App/Services/ImageReadService'
 export default class ProfilesController {
   public show = async ({ view, session, params, response }: HttpContextContract) => {
     const { id } = params
 
     try {
-      const profile = await Profile.getProfileById(id)
+      const fetchedProfile = await Profile.getProfileById(id)
+
+      let posts: any = fetchedProfile.user.posts
+      posts = await ImageReadService.readMultipleImages(posts)
       let imgBase64 = ''
-      if (profile.storage_prefix) {
-        imgBase64 = (await Drive.get(profile.storage_prefix)).toString('base64')
+      if (fetchedProfile.storage_prefix) {
+        imgBase64 = (await Drive.get(fetchedProfile.storage_prefix)).toString('base64')
       }
 
-      const html = await view.render('profiles/show', { profile, imgBase64 })
+      const html = await view.render('profiles/show', { fetchedProfile, imgBase64, posts })
       return html
     } catch (error) {
       console.error(error)
@@ -25,17 +29,19 @@ export default class ProfilesController {
       return response.redirect().toRoute('home')
     }
   }
-  public edit = async ({ view, session, params, response }: HttpContextContract) => {
+  public edit = async ({ view, session, params, bouncer, response }: HttpContextContract) => {
     const { id } = params
-
     try {
-      const profile = await Profile.getProfileById(id)
-      let imgBase64 = ''
-      if (profile.storage_prefix) {
-        imgBase64 = (await Drive.get(profile.storage_prefix)).toString('base64')
+      const fetchedProfile = await Profile.getProfileById(id)
+
+      await bouncer.with('ProfilePolicy').authorize('update', fetchedProfile)
+
+      let profileUrl = ''
+      if (fetchedProfile.storage_prefix) {
+        profileUrl = await Drive.get(fetchedProfile.storage_prefix)
       }
 
-      const html = await view.render('profiles/edit', { profile, imgBase64 })
+      const html = await view.render('profiles/edit', { fetchedProfile, profileUrl })
       return html
     } catch (error) {
       console.error(error)
@@ -44,7 +50,14 @@ export default class ProfilesController {
     }
   }
 
-  public update = async ({ auth, session, request, params, response }: HttpContextContract) => {
+  public update = async ({
+    auth,
+    session,
+    request,
+    bouncer,
+    params,
+    response,
+  }: HttpContextContract) => {
     const { id } = params
     const payload = await request.validate(ProfileUpdateValidator)
 
@@ -54,6 +67,13 @@ export default class ProfilesController {
     } catch (error) {
       console.error(error)
       session.flash({ error: 'Profile not found' })
+      return response.redirect().toRoute('home')
+    }
+    try {
+      await bouncer.with('ProfilePolicy').authorize('update', profile)
+    } catch (error) {
+      console.error(error)
+      session.flash({ error: error.message })
       return response.redirect().toRoute('home')
     }
     let userDir = auth.user!.id.toString()

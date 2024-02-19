@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Post from 'App/Models/Post'
-import S3ReadService from 'App/Services/S3ReadService'
+import ImageReadService from 'App/Services/ImageReadService'
 
 export default class TagPost extends BaseModel {
   @column({ isPrimary: true })
@@ -32,7 +32,7 @@ export default class TagPost extends BaseModel {
 
     let posts = tags.map((item) => item.post)
     posts = [...new Set(posts)]
-    const readedPosts = await S3ReadService.readMultipleImages(posts)
+    const readedPosts = await ImageReadService.readMultipleImages(posts)
     return Promise.resolve(readedPosts)
   }
 }

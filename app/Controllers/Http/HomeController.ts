@@ -1,6 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Post from 'App/Models/Post'
-import S3ReadService from 'App/Services/S3ReadService'
+import ImageReadService from 'App/Services/ImageReadService'
 export default class HomeController {
   public index = async ({ request, view, session, response }: HttpContextContract) => {
     const { search } = request.all()
@@ -12,7 +12,7 @@ export default class HomeController {
           queryBuilder.orWhere('description', 'like', `%${search}%`)
         }
       )
-      const posts = await S3ReadService.readMultipleImages(fetchedPosts)
+      const posts = await ImageReadService.readMultipleImages(fetchedPosts)
       const html = await view.render('welcome', { posts })
       return html
     } catch (error) {

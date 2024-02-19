@@ -52,3 +52,64 @@ $font-family-sans-serif: IBM Plex Sans, sans-serif,
 @import '~@fortawesome/fontawesome-free/scss/regular.scss';
 @import '~@fortawesome/fontawesome-free/scss/solid.scss';
 @import '~@fortawesome/fontawesome-free/scss/v4-shims.scss';
+
+
+
+
+/* clear fix */
+.grid:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+/* ---- .grid-item ---- */
+
+.grid-sizer,
+.grid-item {
+  width: 100%;
+}
+
+.grid-item {
+  float: left;
+}
+
+.grid-item img {
+  display: block;
+  max-width: 100%;
+}
+
+
+@media (min-width: 576px) {
+  .grid-sizer,
+  .grid-item {
+    width: 50%;
+  }
+}
+
+
+@media (min-width: 768px) {
+  .grid-sizer,
+  .grid-item {
+    width: 33.333%;
+  }
+
+}
+
+
+@media (min-width: 992px) {
+  .grid-sizer,
+  .grid-item {
+    width: 25%;
+  }
+
+}
+
+
+@media (min-width: 1200px) {
+
+
+}
+
+@media (min-width: 1400px) {
+}

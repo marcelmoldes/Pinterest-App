@@ -12,8 +12,18 @@ Route.group(() => {
 }).middleware('isGuest')
 
 Route.route('/login', ['GET', 'POST'], 'AuthController.login').as('login')
-Route.get('/logout', 'AuthController.logout').as('logout')
+Route.get('/logout', 'AuthController.logout').as('logout').middleware('auth')
 
-Route.resource('/profile', 'ProfilesController').only(['show', 'edit', 'update'])
-Route.resource('/posts', 'PostsController')
+Route.resource('/profile', 'ProfilesController').only(['show', 'edit', 'update']).middleware({
+  edit: 'auth',
+  update: 'auth',
+})
+Route.resource('/posts', 'PostsController').middleware({
+  index: 'auth',
+  create: 'auth',
+  store: 'auth',
+  edit: 'auth',
+  update: 'auth',
+  destroy: 'auth',
+})
 Route.get('/posts/download/:id', 'PostsController.download').as('posts.download')

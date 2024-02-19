@@ -77,10 +77,11 @@ export default class PostsController {
     }
   }
 
-  public edit = async ({ session, response, view, params }: HttpContextContract) => {
+  public edit = async ({ session, bouncer, response, view, params }: HttpContextContract) => {
     const { id } = params
     try {
       const post = await Post.getPostById(id)
+      await bouncer.with('PostPolicy').authorize('update', post)
       const html = await view.render('posts/edit', { post })
       return html
     } catch (error) {
@@ -89,7 +90,14 @@ export default class PostsController {
       return response.redirect().toRoute('posts.index')
     }
   }
-  public update = async ({ session, auth, response, params, request }: HttpContextContract) => {
+  public update = async ({
+    session,
+    bouncer,
+    auth,
+    response,
+    params,
+    request,
+  }: HttpContextContract) => {
     const { id } = params
     const payload = await request.validate(PostUpdateValidator)
     let post: Post
@@ -100,6 +108,14 @@ export default class PostsController {
       session.flash({ error: 'Post not found' })
       return response.redirect().toRoute('posts.index')
     }
+    try {
+      await bouncer.with('PostPolicy').authorize('update', post)
+    } catch (error) {
+      console.error(error)
+      session.flash({ error: error.message })
+      return response.redirect().toRoute('posts.index')
+    }
+
     let userDir = auth.user!.id
     let storagePrefix
     let newImageName
@@ -148,7 +164,7 @@ export default class PostsController {
       return response.redirect().toRoute('posts.index')
     }
   }
-  public destroy = async ({ params, response, session }: HttpContextContract) => {
+  public destroy = async ({ params, bouncer, response, session }: HttpContextContract) => {
     const { id } = params
     const trx = await Database.transaction()
     let post: Post
@@ -159,7 +175,13 @@ export default class PostsController {
       session.flash({ error: 'Post not found' })
       return response.redirect().toRoute('posts.index')
     }
-
+    try {
+      await bouncer.with('PostPolicy').authorize('delete', post)
+    } catch (error) {
+      console.error(error)
+      session.flash({ error: error.message })
+      return response.redirect().toRoute('posts.index')
+    }
     try {
       await post.delete()
 

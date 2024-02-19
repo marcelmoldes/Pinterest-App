@@ -10,7 +10,7 @@ import {
 import Tag from 'App/Models/Tag'
 import User from 'App/Models/User'
 import { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
-import S3ReadService from 'App/Services/S3ReadService'
+import ImageReadService from 'App/Services/ImageReadService'
 export default class Post extends BaseModel {
   @column({ isPrimary: true })
   public id: number
@@ -73,7 +73,7 @@ export default class Post extends BaseModel {
       .preload('tags')
       .firstOrFail()
 
-    post = await S3ReadService.readSingleImage(post)
+    post = await ImageReadService.readSingleImage(post)
     return Promise.resolve(post)
   }
   public static updatePost = async (data: UpdatePostType, trx: TransactionClientContract) => {

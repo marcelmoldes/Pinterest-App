@@ -13,7 +13,7 @@ import Profile from 'App/Models/Profile'
 import Database from '@ioc:Adonis/Lucid/Database'
 import * as console from 'console'
 import Post from 'App/Models/Post'
-import S3ReadService from 'App/Services/S3ReadService'
+import ImageReadService from 'App/Services/ImageReadService'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -124,7 +124,7 @@ export default class User extends BaseModel {
   }
   public static findPostsByUserId = async (userId: number) => {
     const user = await this.query().where('id', userId).preload('posts').firstOrFail()
-    const posts = await S3ReadService.readMultipleImages(user.posts)
+    const posts = await ImageReadService.readMultipleImages(user.posts)
     return Promise.resolve(posts)
   }
 }
