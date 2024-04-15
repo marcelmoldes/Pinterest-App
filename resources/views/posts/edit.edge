@@ -19,8 +19,7 @@
 
 </div>
 
-  <div class="col-12 col-md-6  col-lg-4 ">
-
+ <div class="col-12 col-md-6  col-lg-4 ">
 <h4 class="mb-4 fs-4 fw-bold text-center">Edit Post</h4>
 <form action="{{route('posts.update',{id:post.id}, {qs: { _method: 'PUT'} }) }}" enctype="multipart/form-data" method="post">
 <div class="form-floating mt-3">
@@ -56,8 +55,7 @@ if(value) {
    <input  class="form-control" {{flashMessages.has('errors.postImage') && 'is-invalid'}}  type="file" name="postImage">
  </div>
 
-
-      @!component('components/tag_input',{tags:post.tags})
+@!component('components/tag_input',{tags:post.tags})
 
       <button class="btn btn-primary bg-danger mt-2" type="submit">
                                                 Update<i class="fa-solid fa-pen-to-square"></i>

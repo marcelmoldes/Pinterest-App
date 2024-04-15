@@ -63,7 +63,7 @@
  </div>
 
   <div class="form-floating mt-3">
-    <input value="{{flashMessages.get('password',fetchedProfile.password ? fetchedProfile.password: '')}}" name="password"   {{flashMessages.has('errors.password') && 'is-invalid'}} type="password" class="form-control" id="floatingPassword" placeholder="Password">
+    <input value="{{flashMessages.get('password',fetchedProfile.password ? fetchedProfile .password: '')}}" name="password"   {{flashMessages.has('errors.password') && 'is-invalid'}} type="password" class="form-control" id="floatingPassword" placeholder="Password">
     <label for="floatingPassword">Password</label>
       @if(flashMessages.has('errors.password'))
         <p class="fs-6 text-danger mb-0">
